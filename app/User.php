@@ -14,6 +14,8 @@ use App\Casts\StatusEnumCast;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use App\Enums\StatusEnums;
+use App\Models\Subscription;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, HasPushSubscriptions, Notifiable, SoftDeletes, UserRateLimit;
@@ -173,5 +175,15 @@ class User extends Authenticatable
             $this->status = StatusEnums::DISABLED;
             $this->save();
         }
+    }
+
+    /**
+     * Get the subscriptions for the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
     }
 }
