@@ -21,7 +21,7 @@ case CANCELED;
         return match ($value) {
             'active' => self::ACTIVE,
             'canceled' => self::CANCELED,
-            default => 'active',
+            default => self::ACTIVE,
         };
     }
 }
