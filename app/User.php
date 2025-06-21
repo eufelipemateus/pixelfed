@@ -125,7 +125,7 @@ class User extends Authenticatable
 
     public function avatarUrl()
     {
-        if (! $this->profile_id || $this->status) {
+        if (! $this->profile_id || $this->status != StatusEnums::ACTIVE) {
             return config('app.url').'/storage/avatars/default.jpg';
         }
 
