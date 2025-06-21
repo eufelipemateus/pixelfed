@@ -47,20 +47,10 @@ class Subscription extends Model
         'expires_at' => 'datetime',
         'canceled_at' => 'datetime',
         'active' => 'boolean',
+        'status' => StatusSubscriptionCast::class,
     ];
 
 
-    /**
-     * Get the custom casts for the model.
-     *
-     * @return array
-     */
-    protected function casts(): array
-    {
-        return [
-            'status' => StatusSubscriptionCast::class,
-        ];
-    }
 
     /**
      * Get the user that owns the subscription.
