@@ -5,9 +5,9 @@ namespace App\Enums;
 enum StatusSubscriptionEnums
 {
 
-case ACTIVE;
-case CANCELED;
-case EXPIRED;
+    case ACTIVE;
+    case CANCELED;
+    case EXPIRED;
 
     public function value(): ?string
     {
@@ -25,6 +25,15 @@ case EXPIRED;
             'canceled' => self::CANCELED,
             'expired' => self::EXPIRED,
             default => self::ACTIVE,
+        };
+    }
+
+    public function badge(): array
+    {
+        return match ($this) {
+            self::ACTIVE => ['Ativa', 'success'],
+            self::CANCELED => ['Cancelada', 'danger'],
+            self::EXPIRED => ['Inativa', 'secondary'],
         };
     }
 }
