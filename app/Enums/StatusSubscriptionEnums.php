@@ -33,7 +33,7 @@ enum StatusSubscriptionEnums
         return match ($this) {
             self::ACTIVE => ['Ativa', 'success'],
             self::CANCELED => ['Cancelada', 'danger'],
-            self::EXPIRED => ['Inativa', 'secondary'],
+            self::EXPIRED => ['Expirada', 'secondary'],
         };
     }
 }
