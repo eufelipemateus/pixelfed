@@ -14,7 +14,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
-use App\Enums\StatusSubscriptionEnums;
+use App\Casts\StatusSubscriptionCast;
 
 
 /**
@@ -58,7 +58,7 @@ class Subscription extends Model
     protected function casts(): array
     {
         return [
-            'status' => StatusSubscriptionEnums::class,
+            'status' => StatusSubscriptionCast::class,
         ];
     }
 
