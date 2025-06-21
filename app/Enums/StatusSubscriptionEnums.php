@@ -7,12 +7,14 @@ enum StatusSubscriptionEnums
 
 case ACTIVE;
 case CANCELED;
+case EXPIRED;
 
     public function value(): ?string
     {
         return match ($this) {
             self::ACTIVE => 'active',
             self::CANCELED => 'canceled',
+            self::EXPIRED => 'expired'
         };
     }
 
@@ -21,6 +23,7 @@ case CANCELED;
         return match ($value) {
             'active' => self::ACTIVE,
             'canceled' => self::CANCELED,
+            'expired' => self::EXPIRED,
             default => self::ACTIVE,
         };
     }
