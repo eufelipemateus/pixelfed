@@ -14,6 +14,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+USE App\Enums\StatusSubscriptionEnums;
+
 
 /**
  * Class Subscription
@@ -47,6 +49,18 @@ class Subscription extends Model
         'active' => 'boolean',
     ];
 
+
+    /**
+     * Get the custom casts for the model.
+     *
+     * @return array
+     */
+    protected function casts(): array
+    {
+        return [
+            'status' => StatusSubscriptionEnums::class,
+        ];
+    }
 
     /**
      * Get the user that owns the subscription.
