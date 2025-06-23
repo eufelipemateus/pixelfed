@@ -161,7 +161,7 @@ jobs:
             echo "PF_LIMIT_DAILY_POSTS_ENABLED=true" >> .env
             echo "PF_LIMIT_DAILY_POSTS_LIMIT=6" >> .env
             echo "PF_LIMIT_DAILY_POSTS_USER_EXCEPTIONS=false" >> .env
-            echo "PF_DEFAULT_NO_AUTOLINK=true" >> .env
+            echo "PF_DEFAULT_NO_AUTOLINK=false" >> .env
 
 
             echo  "VAPID_PUBLIC_KEY=${{secrets.VAPID_PUBLIC_KEY}}" >> .env
