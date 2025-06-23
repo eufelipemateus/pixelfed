@@ -5,6 +5,12 @@
 				<div class="d-flex justify-content-between align-items-center mb-3">
 					<span class="text-muted font-weight-bold">{{ $t("notifications.title")}}</span>
 					<div v-if="feed && feed.length">
+                        <button v-if="totalUnread>0" type="button" @click="markAllRead()" class="btn btn-primary btn-sm">
+                            <i class="fas fa-envelope"></i> <span class="badge text-bg-secondary text-red">{{totalUnread}}</span>
+                        </button>
+                        <button v-else type="button" @click="markAllRead()" class="btn btn-outline-light btn-sm" disabled>
+                            <i class="far fa-envelope-open"></i>
+                        </button>
 						<router-link to="/i/web/notifications" class="btn btn-outline-light btn-sm mr-2" style="color: #B8C2CC !important">
 							<i class="far fa-filter"></i>
 						</router-link>
@@ -34,8 +40,14 @@
 					</template>
 
 					<template v-else>
-						<div v-for="(n, index) in feed" class="mb-2">
+						<div v-for="(n, index) in feed" :class="['my-2 p-2 px-0', n.read ? '': 'unread' ]"  :key="index">
 							<div class="media align-items-center">
+                                <a href="#" v-if="n.read" @click="markUnRead(index)"  class="mx-1 border-0 bg-transparent">
+                                    <i class="far fa-envelope-open"></i>
+                                </a>
+                                <a href="#" v-else  @click="markRead(index)" class="mx-1 border-0 bg-transparent">
+                                    <i class="fas fa-envelope"></i>
+                                </a>
 								<img
 									v-if="n.type === 'autospam.warning'"
 									class="mr-2 rounded-circle shadow-sm p-1"
@@ -209,7 +221,8 @@
 				hasLoaded: false,
 				isEmpty: false,
 				retryTimeout: undefined,
-				retryAttempts: 0
+				retryAttempts: 0,
+                totalUnread: 0,
 			}
 		},
 
@@ -229,6 +242,10 @@
 					clearTimeout(this.retryTimeout);
 					return;
 				}
+                axios.get('/api/v1/notifications/unread_count').then(res => {
+                    this.totalUnread = res.data.count;
+                });
+
 				axios.get('/api/pixelfed/v1/notifications', {
 					params: {
 						limit: 9,
@@ -407,7 +424,40 @@
 					}
 				})
 			},
+            markRead(index) {
+                if(this.feed[index].read) {
+                    return;
+                }
+                axios.post(`/api/v1/notifications/${this.feed[index].id}/dismiss`)
+                .then(res => {
+                    this.feed[index].read = true;
+                    this.totalUnread = this.totalUnread - 1;
+                });
+            },
+            markUnRead(index){
+                if(!this.feed[index].read) {
+                    return;
+                }
+                axios.post(`/api/v1/notifications/${this.feed[index].id}/mark_as_unread`)
+                .then(res => {
+                    this.feed[index].read = false;
+                    this.totalUnread = this.totalUnread + 1;
+                });
 
+            },
+            markAllRead(){
+                if(window.confirm(this.$t('notifications.markAllRead')) == false) {
+                    return;
+                }
+
+                axios.post(`/api/v1/notifications/clear`)
+                .then(res => {
+                    for(let i = 0; i < this.feed.length; i++) {
+                        this.feed[i].read = true;
+                        this.totalUnread = 0;
+                    }
+                });
+            },
 			showAutospamInfo(status) {
 				let el = document.createElement('p');
 				el.classList.add('text-left');
@@ -449,5 +499,9 @@
 		.card-body {
 			width: 100%;
 		}
+
+        .unread{
+            background: #F8F9FA !important;
+        }
 	}
 </style>
