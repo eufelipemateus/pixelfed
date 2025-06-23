@@ -163,6 +163,11 @@ jobs:
             echo "PF_LIMIT_DAILY_POSTS_USER_EXCEPTIONS=false" >> .env
             echo "PF_DEFAULT_NO_AUTOLINK=false" >> .env
 
+            echo "PAYPAL_CLIENT_ID=${{secrets.PAYPAL_CLIENT_ID}}" >> .env
+            echo "PAYPAL_SECRET=${{secrets.PAYPAL_SECRET}}" >> .env
+            echo "PAYPAL_BASE_URL=${{secrets.PAYPAL_BASE_URL}}" >> .env
+            echo "PAYPAL_WEBHOOK_ID=${{secrets.PAYPAL_WEBHOOK_ID}}"
+
 
             echo  "VAPID_PUBLIC_KEY=${{secrets.VAPID_PUBLIC_KEY}}" >> .env
             echo  "VAPID_PRIVATE_KEY=${{secrets.VAPID_PRIVATE_KEY}}" >> .env
