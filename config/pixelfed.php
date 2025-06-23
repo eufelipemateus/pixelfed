@@ -311,7 +311,7 @@ return [
     ],
 
     'limit_daily_posts' =>[
-        'enabled' => env('PF_LIMIT_DAILY_POSTS', false),
+        'enabled' => env('PF_LIMIT_DAILY_POSTS_ENABLED', false),
         'limit' => (int) env('PF_LIMIT_DAILY_POSTS_LIMIT', 15),
         'user_exceptions' => env('PF_LIMIT_DAILY_POSTS_USER_EXCEPTIONS', false),
     ]
