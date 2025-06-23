@@ -13,6 +13,7 @@ return [
 'relationships' =>          'Relacionamentos',
 'security' =>               'Segurança',
 'timelines' =>              'Linhas do Tempo',
+'subscriptions' =>          'Contribuidores',
 'applications' =>           'Aplicativos',
 'developers' =>             'Desenvolvedores',
 'import' =>                 'Importar',

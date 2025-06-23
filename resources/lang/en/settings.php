@@ -13,6 +13,7 @@ return [
     'relationships' =>          'Relationships',
     'security' =>               'Security',
     'timelines' =>              'Timelines',
+    'subscriptions' =>          'Contributions',
     'applications' =>           'Applications',
     'developers' =>             'Developers',
     'import' =>                 'Import',
