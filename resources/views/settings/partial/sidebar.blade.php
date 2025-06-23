@@ -38,9 +38,21 @@
             <li class="nav-item pl-3 {{request()->is('settings/timeline*')?'active':''}}">
                 <a class="nav-link font-weight-light text-muted" href="{{route('settings.timeline')}}">{{__('settings.timelines')}}</a>
             </li>
+
+            @if(config('pixelfed.app_felipemateus'))
             <li class="nav-item">
                 <hr>
             </li>
+
+            <li class="nav-item pl-3 {{request()->is('settings/subscriptions')?'active':''}}">
+                <a class="nav-link font-weight-light text-muted" href="{{route('felipemateus.settings.subscriptions')}}">{{__('settings.subscriptions')}}</a>
+            </li>
+
+            @endif
+            <li class="nav-item">
+                <hr>
+            </li>
+
 
             @if((bool) config_cache('pixelfed.oauth_enabled') == true)
             <li class="nav-item pl-3 {{request()->is('settings/applications')?'active':''}}">

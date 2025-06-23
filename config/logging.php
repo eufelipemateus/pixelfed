@@ -96,6 +96,11 @@ return [
             'path'   => storage_path('logs/media.log'),
             'level'  => 'debug'
         ],
+        'subscriptions' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/subscriptions.log'),
+            'level' => 'debug',
+        ]
     ],
 
 ];
