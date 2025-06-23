@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('started_at');
             $table->date('expires_at')->nullable();
             $table->date('canceled_at')->nullable();
+            $table->date('suspended_at')->nullable();
             $table->string('status')->default('active');
             $table->timestamps();
         });
