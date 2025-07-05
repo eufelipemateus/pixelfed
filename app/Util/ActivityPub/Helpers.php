@@ -29,7 +29,7 @@ use League\Uri\Exceptions\UriException;
 use League\Uri\Uri;
 use Purify;
 use Validator;
-use Illuminate\Support\Facades\DB;
+use App\Jobs\InboxPipeline\LoadOutbox;
 
 
 class Helpers
@@ -1200,6 +1200,11 @@ class Helpers
         );
 
         self::handleProfileAvatar($profile);
+
+        if (empty($profile->last_fetched_at)) {
+            LoadOutbox::dispatch($profile)
+                ->onQueue('low');
+        }
 
         return $profile;
     }
