@@ -16,6 +16,7 @@ class NotificationTransformer extends Fractal\TransformerAbstract
             'id' => (string) $notification->id,
             'type' => $this->replaceTypeVerb($notification->action),
             'created_at' => (string) str_replace('+00:00', 'Z', $notification->created_at->format(DATE_RFC3339_EXTENDED)),
+            'read' => (bool) $notification->read_at,
         ];
 
         $n = $notification;

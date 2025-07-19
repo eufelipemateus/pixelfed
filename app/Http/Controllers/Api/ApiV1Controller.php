@@ -4692,6 +4692,121 @@ class ApiV1Controller extends Controller
 
         return $this->json($status);
     }
+
+    /**
+     * GET /api/v1/notifications/{id}/dismiss
+     *
+     * @return array
+     */
+    public function accountNotificationsDimiss(Request $request, $id)
+    {
+        abort_if(! $request->user(), 403);
+        abort_unless($request->user()->tokenCan('write'), 403);
+
+        $user = $request->user();
+        $pid = $user->profile_id;
+
+        if (! $id) {
+            return $this->json(['error' => 'Missing id'], 422);
+        }
+
+        $notification = Notification::whereProfileId($pid)->findOrFail($id);
+        $notification->read_at = now();
+        $notification->save();
+
+        Cache::forget('service:notification:'.$id);
+        return $this->json(['success' => true]);
+    }
+
+    /**
+     * POST /api/v1/notifications/:id/dismiss
+     *
+     * @return array
+     */
+    public function accountNotificationsMarkAsUnread(Request $request, $id)
+    {
+
+        abort_if(! $request->user(), 403);
+        abort_unless($request->user()->tokenCan('write'), 403);
+
+        $user = $request->user();
+        $pid = $user->profile_id;
+
+        if (! $id) {
+            return $this->json(['error' => 'Missing id'], 422);
+        }
+
+        $notification = Notification::whereProfileId($pid)->findOrFail($id);
+        $notification->read_at = null;
+        $notification->save();
+
+        Cache::forget('service:notification:'.$id);
+        return $this->json(['success' => true]);
+    }
+
+    /**
+     * POST /api/v1/notifications/clear
+     *
+     * @return array
+     */
+    public function accountNotificationsDimissAll(Request $request)
+    {
+        abort_if(! $request->user(), 403);
+        abort_unless($request->user()->tokenCan('write'), 403);
+
+        $user = $request->user();
+        $pid = $user->profile_id;
+
+        Notification::whereNull('read_at')
+        ->whereProfileId($pid)
+        ->chunk(100, function ($chunk) {
+            foreach ($chunk as $n) {
+            $n->read_at = now();
+            $n->save();
+            Cache::forget('service:notification:'.$n->id);
+            }
+        });
+
+        return $this->json(['success' => true]);
+    }
+
+
+    /**
+     * GET /api/v1/notifications/unread_count
+     *
+     * @return array
+     */
+    public function accountNotificationsUnreadCount(Request $request){
+
+        abort_if(! $request->user(), 403);
+        abort_unless($request->user()->tokenCan('write'), 403);
+
+        $limit = $request->input('limit', 100);
+        $types = $request->input('types', []);
+        $exclude = $request->input('exclude_types', []);
+
+        $user = $request->user();
+        $pid = $user->profile_id;
+
+        $validTypes = ['mention', 'favourite', 'reblog', 'follow', 'follow_request', 'poll'];
+
+        $types = array_filter($types, fn($type) => in_array($type, $validTypes));
+        $exclude = array_filter($exclude, fn($type) => in_array($type, $validTypes));
+
+        $query = Notification::query()
+            ->whereNull('read_at')
+            ->where('profile_id', $pid )
+            ->when(!empty($types), fn($q) => $q->whereIn('type', $types))
+            ->when(!empty($exclude), fn($q) => $q->whereNotIn('type', $exclude))
+            ->limit($limit);
+
+        $unreadCount = $query->count();
+
+        return response()->json([
+            'count' => $unreadCount
+        ]);
+    }
+
     /**
      *  GET /api/v1/statuses/{id}/translate
      */
