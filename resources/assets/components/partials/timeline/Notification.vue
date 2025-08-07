@@ -1,6 +1,13 @@
 <template>
-	<div class="media mb-2 align-items-center px-3 shadow-sm py-2 bg-white" style="border-radius: 15px;">
-		<a href="#" @click.prevent="getProfileUrl(n.account)" v-b-tooltip.hover :title="n.account.acct">
+	<div :class="['media mb-2 align-items-center px-3 shadow-sm py-2 bg-white',  n.read ? '': 'unread']" style="border-radius: 15px;">
+
+        <a href="#" v-if="n.read" @click="markUnRead()"  class="mx-2 border-0 bg-transparent">
+            <i class="far fa-envelope-open"></i>
+        </a>
+        <a href="#" v-else  @click="markRead()" class="mx-2 border-0 bg-transparent">
+            <i class="fas fa-envelope"></i>
+        </a>
+        <a href="#" @click.prevent="getProfileUrl(n.account)" v-b-tooltip.hover :title="n.account.acct">
 			<img class="mr-3 shadow-sm" style="border-radius:8px" :src="n.account.avatar" alt="" width="40" height="40" onerror="this.onerror=null;this.src='/storage/avatars/default.jpg';">
 		</a>
 
@@ -206,7 +213,36 @@
 						cachedProfile: this.profile
 					}
 				});
-			}
+			},
+
+            markRead() {
+                if(this.n.read) {
+                    return;
+                }
+                axios.post(`/api/v1/notifications/mark_as_read`, {
+                    id: this.n.id
+                })
+                .then(res => {
+                    this.n.read = true;
+                });
+            },
+            markUnRead(){
+                if(!this.n.read) {
+                    return;
+                }
+                axios.post(`/api/v1/notifications/mark_as_unread`, {
+                    id: this.n.id
+                })
+                .then(res => {
+                    this.n.read = false;
+                });
+
+            },
 		}
 	}
 </script>
+<style lang="scss">
+ .unread{
+            background: #F8F9FA !important;
+        }
+</style>

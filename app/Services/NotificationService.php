@@ -322,4 +322,18 @@ class NotificationService
 
         return 0;
     }
+
+    public static function removeOldNotifications()
+    {
+        Notification::whereNotNull('read_at')
+            ->where('read_at', '<', now()->subMonths(3))
+            ->chunkById(
+                100, function ($notifications) {
+                    foreach ($notifications as $notification) {
+                        $notification->forceDelete();
+                        self::del($notification->id, $notification->id);
+                    }
+                }
+            );
+    }
 }
