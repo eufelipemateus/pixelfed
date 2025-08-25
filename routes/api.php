@@ -136,6 +136,10 @@ Route::group(['prefix' => 'api'], function () use ($middleware) {
         Route::put('media/{id}', 'Api\ApiV1Controller@mediaUpdate')->middleware($middleware);
         Route::get('mutes', 'Api\ApiV1Controller@accountMutes')->middleware($middleware);
         Route::get('notifications', 'Api\ApiV1Controller@accountNotifications')->middleware($middleware);
+        Route::post('notifications/{id}/dismiss', 'Api\ApiV1Controller@accountNotificationsDimiss')->middleware($middleware);
+        Route::post('notifications/{id}/mark_as_unread', 'Api\ApiV1Controller@accountNotificationsMarkAsUnread')->middleware($middleware);
+        Route::post('notifications/clear', 'Api\ApiV1Controller@accountNotificationsDimissAll')->middleware($middleware);
+        Route::get('notifications/unread_count', 'Api\ApiV1Controller@accountNotificationsUnreadCount')->middleware($middleware);
         Route::get('suggestions', 'Api\ApiV1Controller@accountSuggestions')->middleware($middleware);
 
         Route::post('statuses/{id}/favourite', 'Api\ApiV1Controller@statusFavouriteById')->middleware($middleware);

@@ -53,6 +53,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('app:hashtag-cached-count-update')->hourlyAt(25)->onOneServer();
         $schedule->command('app:account-post-count-stat-update')->everySixHours(25)->onOneServer();
         $schedule->command('app:instance-update-total-local-posts')->twiceDailyAt(1, 13, 45)->onOneServer();
+        $schedule->command('app:remove-old-notification')->everySixHours()->onOneServer();
         $schedule->command('app:update-pages-view-statitics')->everyTenMinutes(); // Analytic statistics for pages
         $schedule->command('app:desactive-inactive-account')->weeklyOn(6, '03:00')->onOneServer();
 
